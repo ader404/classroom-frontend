@@ -91,24 +91,24 @@ const SubjectsList = () => {
             <h1 className="page-title">Subjects</h1>
             <div className="intro-row">
                 <p>Quick access to essential metrics and management tools</p>
-                <div className="action-row">
-                    <div className="search-field">
-                        <Search className="search-icon" />
+                <div className="action-row flex flex-col sm:flex-row justify-between items-center w-full gap-4 mt-4">
+                    <div className="search-field relative w-full sm:max-w-sm">
+                        <Search className="search-icon absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                         <input
                             type="text"
                             placeholder="Search by name ..."
-                            className="pl-10 w-full"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
 
-                    <div className="flex gap-2 w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center">
                         <Select
                             value={selectDepartment}
                             onValueChange={setSelectDepartment}>
 
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full sm:w-[180px]">
                                 <SelectValue placeholder="Filter by Department" />
                             </SelectTrigger>
 
@@ -120,7 +120,7 @@ const SubjectsList = () => {
                                     <SelectItem key={department.value} value={department.value}>
                                         {department.label}
                                     </SelectItem>
-                                ))}
+                                )) as any}
                             </SelectContent>
 
                         </Select>
