@@ -35,6 +35,7 @@ import {
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Loader2 } from "lucide-react";
 import UploadWidget from "@/components/upload-widget";
+import { teachers, subjects } from "@/constants";
 
 const Create = () => {
   const back = useBack();
@@ -48,6 +49,7 @@ const Create = () => {
   });
 
   const {
+    refineCore: { onFinish },
     handleSubmit,
     formState: { isSubmitting, errors },
     control,
@@ -55,38 +57,15 @@ const Create = () => {
 
   const onSubmit = async (values: z.infer<typeof classSchema>) => {
     try {
-      console.log(values);
+      await onFinish(values);
     } catch (error) {
       console.error("Error creating class:", error);
     }
   };
 
-  const teachers = [
-    {
-      id: 1,
-      name: "John Doe",
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-    },
-  ];
-
-  const subjects = [
-    {
-      id: 1,
-      name: "Math",
-      code: "MATH",
-    },
-    {
-      id: 2,
-      name: "English",
-      code: "ENG",
-    },
-  ];
 
   const bannerPublicId = form.watch("bannerCldPubId");
-  const setBannerImage = (file, field) => {
+  const setBannerImage = (file: any, field: any) => {
     if (file) {
       field.onChange(file.url);
       form.setValue("bannerCldPubId", file.publicId, {
@@ -94,7 +73,7 @@ const Create = () => {
         shouldValidate: true,
       });
     } else {
-      field.onChange(null);
+      field.onChange("");
       form.setValue("bannerCldPubId", "", {
         shouldDirty: true,
         shouldValidate: true,

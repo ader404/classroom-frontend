@@ -1,4 +1,4 @@
-import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants";
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, MAX_FILE_SIZE, ALLOWED_TYPES } from "@/constants";
 import { Trash, UploadCloud } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
@@ -42,8 +42,8 @@ function UploadWidget({
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: false,
           folder: "uploads",
-          maxFileSize: 5_000_000,
-          clientAllowedFormats: ["png", "jpg", "jpeg"],
+          maxFileSize: MAX_FILE_SIZE,
+          clientAllowedFormats: ALLOWED_TYPES.map((type: string) => type.split("/")[1]),
         },
         (error, result) => {
           if (error) {
@@ -69,9 +69,13 @@ function UploadWidget({
     };
 
     if (initializeWidget()) return;
+    
+    let attempts = 0;
+    const maxAttempts = 10;
 
     const intervalId = window.setInterval(() => {
-      if (initializeWidget()) {
+      attempts++;
+      if (initializeWidget() || attempts >= maxAttempts) {
         window.clearInterval(intervalId);
       }
     }, 500);
@@ -133,9 +137,11 @@ function UploadWidget({
         <div
           className="upload-dropzone"
           role="button"
-          tabIndex={0}
-          onClick={openWidget}
+          tabIndex={disabled ? -1 : 0}
+          aria-disabled={disabled}
+          onClick={() => !disabled && openWidget()}
           onKeyDown={(event) => {
+            if (disabled) return;
             if (event.key === "Enter" || event.key === " ") {
               event.preventDefault();
               openWidget();

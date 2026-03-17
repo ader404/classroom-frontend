@@ -5,7 +5,7 @@ import { ListResponse } from "@/types";
 
 
 if (!BACKEND_BASE_URL) {
-  throw new Error('BACKEND_BASE_URL is not configured. please set VIRE_BACKEND_BASE_URL in your . env file.')
+   throw new Error('BACKEND_BASE_URL is not configured. please set VITE_BACKEND_BASE_URL in your .env file.')
 }
 
 const options: CreateDataProviderOptions = {

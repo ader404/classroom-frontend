@@ -345,7 +345,7 @@
   --sidebar-ring: oklch(0 0 0);
   --font-sans: Geist, sans-serif;
   --font-serif: Georgia, serif;
-  --font-mono: Geist Mono, monospace;
+  --font-mono: "Geist Mono", monospace;
   --radius: 0.5rem;
   --shadow-x: 0px;
   --shadow-y: 1px;
@@ -400,7 +400,7 @@
   --sidebar-ring: oklch(0.7200 0 0);
   --font-sans: Geist, sans-serif;
   --font-serif: Georgia, serif;
-  --font-mono: Geist Mono, monospace;
+  --font-mono: "Geist Mono", monospace;
   --radius: 0.5rem;
   --shadow-x: 0px;
   --shadow-y: 1px;

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button.tsx";
 
 
 
-const list = () => {
+const List = () => {
 
     const go = useGo();
 
@@ -27,4 +27,4 @@ const list = () => {
     )
 }
 
-export default list
+export default List

@@ -13,7 +13,7 @@ const SubjectCreate = () => {
           })
         }
       >
-        go baack habiiibbbiii
+        Go back
       </Button>
     </div>
   );
