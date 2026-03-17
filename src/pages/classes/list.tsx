@@ -1,0 +1,30 @@
+import { useGo } from "@refinedev/core";
+import { Button } from "@/components/ui/button.tsx";
+
+
+
+
+
+const List = () => {
+
+    const go = useGo();
+
+    return (
+        <div>
+            <h4>List</h4>
+            <Button
+                onClick={() =>
+                    go({
+                        to: "/classes/create",
+                        type: "push",
+                    })
+                }
+            >
+                Create Class
+            </Button>
+        </div>
+
+    )
+}
+
+export default List
