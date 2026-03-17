@@ -11,7 +11,7 @@ const List = () => {
 
     return (
         <div>
-            <h4>list</h4>
+            <h4>List</h4>
             <Button
                 onClick={() =>
                     go({
