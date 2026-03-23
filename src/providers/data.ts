@@ -1,16 +1,12 @@
 import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
-import { BACKEND_BASE_URL } from "../constants";
-import { ListResponse } from "@/types";
 
-
-
-if (!BACKEND_BASE_URL) {
-   throw new Error('BACKEND_BASE_URL is not configured. please set VITE_BACKEND_BASE_URL in your .env file.')
-}
+import { CreateResponse, GetOneResponse, ListResponse } from "@/types";
+import { BACKEND_BASE_URL } from "@/constants";
 
 const options: CreateDataProviderOptions = {
   getList: {
     getEndpoint: ({ resource }) => resource,
+
     buildQueryParams: async ({ resource, pagination, filters }) => {
       const params: Record<string, string | number> = {};
 
@@ -55,17 +51,56 @@ const options: CreateDataProviderOptions = {
       return params;
     },
 
-    mapResponse: async (Response) => {
-      const payload: ListResponse = await Response.clone().json();
+    mapResponse: async (response) => {
+      const payload: ListResponse & { message?: string } = await response.json();
+      if (!response.ok) {
+        throw {
+          message: payload.message || response.statusText,
+          statusCode: response.status,
+        };
+      }
       return payload.data ?? [];
     },
-    getTotalCount: async (Response) => {
-      const payload: ListResponse = await Response.clone().json();
-      return payload.pagination?.total ?? payload.data?.length ?? 0;
-    }
-  }
 
-}
+    getTotalCount: async (response) => {
+      const payload: ListResponse = await response.json();
+      return payload.pagination?.total ?? payload.data?.length ?? 0;
+    },
+  },
+
+  create: {
+    getEndpoint: ({ resource }) => resource,
+
+    buildBodyParams: async ({ variables }) => variables,
+
+    mapResponse: async (response) => {
+      const json: CreateResponse & { message?: string } = await response.json();
+      if (!response.ok) {
+        throw {
+          message: json.message || response.statusText,
+          statusCode: response.status,
+        };
+      }
+      return json.data ?? {};
+    },
+  },
+
+  getOne: {
+    getEndpoint: ({ resource, id }) => `${resource}/${id}`,
+
+    mapResponse: async (response) => {
+      const json: GetOneResponse & { message?: string } = await response.json();
+      if (!response.ok) {
+        throw {
+          message: json.message || response.statusText,
+          statusCode: response.status,
+        };
+      }
+      return json.data ?? {};
+    },
+  },
+};
 
 const { dataProvider } = createDataProvider(BACKEND_BASE_URL, options);
-export default dataProvider;
+
+export { dataProvider };

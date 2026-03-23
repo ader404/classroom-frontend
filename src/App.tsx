@@ -10,16 +10,14 @@ import "./App.css";
 import { Toaster } from "./components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
-import dataProvider from "./providers/data";
+import { dataProvider } from "./providers/data";
 import Dashboard from "./pages/dashboard";
-import { GraduationCap, Home } from "lucide-react";
+import { GraduationCap, Home, BookOpen } from "lucide-react";
 import { Layout } from "./components/refine-ui/layout/layout";
 import SubjectsList from "./pages/subjects/list";
 import SubjectCreate from "./pages/subjects/create";
 import ClassesList from "./pages/classes/list";
 import ClassesCreate from "./pages/classes/create";
-
-import { BookOpen } from "lucide-react";
 
 function App() {
   return (
@@ -38,39 +36,41 @@ function App() {
               }}
               resources={[
                 {
-                  name: 'dashboard',
-                  list: '/',
+                  name: "dashboard",
+                  list: "/",
                   meta: {
-                    label: 'Home',
+                    label: "Home",
                     icon: <Home />,
-                  }
+                  },
                 },
                 {
-                  name: 'subjects',
-                  list: '/subjects',
-                  create: '/subjects/create',
+                  name: "subjects",
+                  list: "/subjects",
+                  create: "/subjects/create",
                   meta: {
-                    label: 'Subjects',
+                    label: "Subjects",
                     icon: <BookOpen />,
-                  }
+                  },
                 },
                 {
-                  name: 'classes',
-                  list: '/classes',
-                  create: '/classes/create',
+                  name: "classes",
+                  list: "/classes",
+                  create: "/classes/create",
                   meta: {
-                    label: 'Classes',
+                    label: "Classes",
                     icon: <GraduationCap />,
-                  }
-                }
+                  },
+                },
               ]}
             >
               <Routes>
-                <Route element={
-                  <Layout>
-                    <Outlet />
-                  </Layout>
-                } >
+                <Route
+                  element={
+                    <Layout>
+                      <Outlet />
+                    </Layout>
+                  }
+                >
                   <Route path="/" element={<Dashboard />} />
 
                   <Route path="/subjects">
@@ -82,9 +82,6 @@ function App() {
                     <Route path="create" element={<ClassesCreate />} />
                   </Route>
                 </Route>
-
-
-
               </Routes>
               <Toaster />
               <RefineKbar />
