@@ -29,6 +29,7 @@ export const SignInForm = () => {
   const Link = useLink();
 
   const { title } = useRefineOptions();
+  const titleIcon = title?.icon ?? null;
 
   const { mutate: login } = useLogin();
 
@@ -62,15 +63,15 @@ export const SignInForm = () => {
         "justify-center",
         "px-6",
         "py-8",
-        "min-h-svh"
+        "min-h-svh",
       )}
     >
       <div className={cn("flex", "items-center", "justify-center")}>
-        {title.icon && (
+        {titleIcon && (
           <div
             className={cn("text-foreground", "[&>svg]:w-12", "[&>svg]:h-12")}
           >
-            {title.icon}
+            {titleIcon}
           </div>
         )}
       </div>
@@ -82,7 +83,7 @@ export const SignInForm = () => {
               "text-blue-600",
               "dark:text-blue-400",
               "text-3xl",
-              "font-semibold"
+              "font-semibold",
             )}
           >
             Sign in
@@ -125,7 +126,7 @@ export const SignInForm = () => {
                 "flex items-center justify-between",
                 "flex-wrap",
                 "gap-2",
-                "mt-4"
+                "mt-4",
               )}
             >
               <div className={cn("flex items-center", "space-x-2")}>
@@ -147,7 +148,7 @@ export const SignInForm = () => {
                   "gap-2",
                   "text-primary hover:underline",
                   "text-blue-600",
-                  "dark:text-blue-400"
+                  "dark:text-blue-400",
                 )}
               >
                 <span>Forgot password</span>
@@ -229,7 +230,7 @@ export const SignInForm = () => {
                 "text-green-600",
                 "dark:text-green-400",
                 "font-semibold",
-                "underline"
+                "underline",
               )}
             >
               Sign up

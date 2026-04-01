@@ -18,6 +18,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge.tsx";
 import { useList } from "@refinedev/core";
 import { ShowButton } from "@/components/refine-ui/buttons/show.tsx";
+import { EditButton } from "@/components/refine-ui/buttons/edit";
 
 const ClassesList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -132,6 +133,21 @@ const ClassesList = () => {
           >
             View
           </ShowButton>
+        ),
+      },
+      {
+        id: "actions",
+        size: 180,
+        header: () => <p className="column-title">Actions</p>,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            <EditButton
+              resource="classes"
+              recordItemId={row.original.id}
+              variant="outline"
+              size="sm"
+            />
+          </div>
         ),
       },
     ],

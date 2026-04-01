@@ -1,14 +1,17 @@
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "@refinedev/react-hook-form";
 import {
   useBack,
+  useOne,
   useList,
   type BaseRecord,
   type HttpError,
 } from "@refinedev/core";
 import * as z from "zod";
 
-import { CreateView } from "@/components/refine-ui/views/create-view";
+import { EditView } from "@/components/refine-ui/views/edit-view";
+import { EditViewHeader } from "@/components/refine-ui/views/edit-view";
 import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,8 +34,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Department } from "@/types";
+import { useParams } from "react-router";
 
-const subjectCreateSchema = z.object({
+const subjectEditSchema = z.object({
   departmentId: z.coerce
     .number({
       required_error: "Department is required",
@@ -46,16 +50,18 @@ const subjectCreateSchema = z.object({
     .min(5, "Subject description must be at least 5 characters"),
 });
 
-type SubjectFormValues = z.infer<typeof subjectCreateSchema>;
+type SubjectFormValues = z.infer<typeof subjectEditSchema>;
 
-const SubjectsCreate = () => {
+const SubjectsEdit = () => {
   const back = useBack();
+  const { id } = useParams();
 
   const form = useForm<BaseRecord, HttpError, SubjectFormValues>({
-    resolver: zodResolver(subjectCreateSchema),
+    resolver: zodResolver(subjectEditSchema),
     refineCoreProps: {
       resource: "subjects",
-      action: "create",
+      action: "edit",
+      id,
     },
     defaultValues: {
       departmentId: 0,
@@ -65,12 +71,28 @@ const SubjectsCreate = () => {
     },
   });
 
-  const {
-    refineCore: { onFinish },
-    handleSubmit,
-    formState: { isSubmitting },
-    control,
-  } = form;
+  const { refineCore, handleSubmit, formState, control, reset } = form;
+  const { onFinish } = refineCore;
+  const { isSubmitting } = formState;
+
+  const { result: subjectResult } = useOne({
+    resource: "subjects",
+    id: id ?? "",
+  });
+
+  const subjectData = (subjectResult as { subject?: any })?.subject
+    ?? subjectResult;
+
+  useEffect(() => {
+    if (subjectData) {
+      reset({
+        departmentId: subjectData.departmentId ?? 0,
+        name: subjectData.name ?? "",
+        code: subjectData.code ?? "",
+        description: subjectData.description ?? "",
+      });
+    }
+  }, [reset, subjectData]);
 
   const { query: departmentsQuery } = useList<Department>({
     resource: "departments",
@@ -86,19 +108,14 @@ const SubjectsCreate = () => {
     try {
       await onFinish(values);
     } catch (error) {
-      console.error("Error creating subject:", error);
+      console.error("Error updating subject:", error);
     }
   };
 
   return (
-    <CreateView className="class-view">
+    <EditView className="class-view">
+      <EditViewHeader resource="subjects" title="Edit Subject" />
       <Breadcrumb />
-
-      <h1 className="page-title">Create a Subject</h1>
-      <div className="intro-row">
-        <p>Provide the required information below to add a subject.</p>
-        <Button onClick={() => back()}>Go Back</Button>
-      </div>
 
       <Separator />
 
@@ -106,7 +123,7 @@ const SubjectsCreate = () => {
         <Card className="class-form-card">
           <CardHeader className="relative z-10">
             <CardTitle className="text-2xl pb-0 font-bold text-gradient-orange">
-              Fill out form
+              Update subject
             </CardTitle>
           </CardHeader>
 
@@ -201,16 +218,21 @@ const SubjectsCreate = () => {
                   )}
                 />
 
-                <Button type="submit" size="lg" disabled={isSubmitting}>
-                  {isSubmitting ? "Creating..." : "Create Subject"}
-                </Button>
+                <div className="flex gap-3">
+                  <Button type="button" variant="outline" onClick={() => back()}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" size="lg" disabled={isSubmitting}>
+                    {isSubmitting ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
         </Card>
       </div>
-    </CreateView>
+    </EditView>
   );
 };
 
-export default SubjectsCreate;
+export default SubjectsEdit;

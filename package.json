@@ -1,5 +1,5 @@
 {
-  "name": "Classroom-frontend",
+  "name": "classroom-frontend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -88,9 +88,9 @@
     "vite": "^6.3.5"
   },
   "scripts": {
-    "dev": "refine dev",
-    "build": "tsc && refine build",
-    "start": "refine start",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "start": "vite preview",
     "refine": "refine"
   },
   "browserslist": {
