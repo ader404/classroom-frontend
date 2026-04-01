@@ -13,7 +13,8 @@ import {
   useLogout,
   useRefineOptions,
 } from "@refinedev/core";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, UserCog } from "lucide-react";
+import { Link } from "react-router";
 
 export const Header = () => {
   const { isMobile } = useSidebar();
@@ -50,6 +51,8 @@ function MobileHeader() {
   const { open, isMobile } = useSidebar();
 
   const { title } = useRefineOptions();
+  const titleIcon = title?.icon ?? null;
+  const titleText = title?.text ?? "Classroom";
 
   return (
     <header
@@ -95,7 +98,7 @@ function MobileHeader() {
           }
         )}
       >
-        <div>{title.icon}</div>
+        <div>{titleIcon}</div>
         <h2
           className={cn(
             "text-sm",
@@ -108,7 +111,7 @@ function MobileHeader() {
             }
           )}
         >
-          {title.text}
+          {titleText}
         </h2>
       </div>
 
@@ -132,6 +135,12 @@ const UserDropdown = () => {
         <UserAvatar />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <Link to="/profile" className={cn("flex items-center gap-2")}>
+            <UserCog className={cn("text-muted-foreground")} />
+            <span>Profile</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             logout();

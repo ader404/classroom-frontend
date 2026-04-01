@@ -22,6 +22,7 @@ export const ForgotPasswordForm = () => {
   const Link = useLink();
 
   const { title } = useRefineOptions();
+  const titleIcon = title?.icon ?? null;
 
   const { mutate: forgotPassword } = useForgotPassword();
 
@@ -46,11 +47,11 @@ export const ForgotPasswordForm = () => {
       )}
     >
       <div className={cn("flex", "items-center", "justify-center", "gap-2")}>
-        {title.icon && (
+        {titleIcon && (
           <div
             className={cn("text-foreground", "[&>svg]:w-12", "[&>svg]:h-12")}
           >
-            {title.icon}
+            {titleIcon}
           </div>
         )}
       </div>

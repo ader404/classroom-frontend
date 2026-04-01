@@ -4,12 +4,10 @@ import { cn } from "@/lib/utils";
 import { useGetIdentity } from "@refinedev/core";
 
 type User = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
+  id: string;
+  name: string;
   email: string;
-  avatar?: string;
+  image?: string;
 };
 
 export function UserAvatar() {
@@ -19,7 +17,8 @@ export function UserAvatar() {
     return <Skeleton className={cn("h-10", "w-10", "rounded-full")} />;
   }
 
-  const { fullName, avatar } = user;
+  const fullName = user.name;
+  const avatar = user.image;
 
   return (
     <Avatar className={cn("h-10", "w-10")}>

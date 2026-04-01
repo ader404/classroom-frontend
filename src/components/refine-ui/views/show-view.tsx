@@ -14,6 +14,7 @@ import {
 } from "@refinedev/core";
 import { ArrowLeftIcon } from "lucide-react";
 import { EditButton } from "../buttons/edit";
+import { DeleteButton } from "../buttons/delete";
 
 type ShowViewProps = PropsWithChildren<{
   className?: string;
@@ -89,6 +90,10 @@ export const ShowViewHeader = ({
           />
           <EditButton
             variant="outline"
+            recordItemId={recordItemId}
+            resource={resourceName}
+          />
+          <DeleteButton
             recordItemId={recordItemId}
             resource={resourceName}
           />

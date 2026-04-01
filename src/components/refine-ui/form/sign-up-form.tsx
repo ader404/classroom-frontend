@@ -14,8 +14,17 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { ROLE_OPTIONS } from "@/constants";
+import { UserRole } from "@/types";
 import {
   useLink,
   useNotification,
@@ -24,15 +33,18 @@ import {
 } from "@refinedev/core";
 
 export const SignUpForm = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState<UserRole>(UserRole.STUDENT);
 
   const { open } = useNotification();
 
   const Link = useLink();
 
   const { title } = useRefineOptions();
+  const titleIcon = title?.icon ?? null;
 
   const { mutate: register } = useRegister();
 
@@ -51,8 +63,10 @@ export const SignUpForm = () => {
     }
 
     register({
+      name,
       email,
       password,
+      role,
     });
   };
 
@@ -77,15 +91,15 @@ export const SignUpForm = () => {
         "justify-center",
         "px-6",
         "py-8",
-        "min-h-svh"
+        "min-h-svh",
       )}
     >
       <div className={cn("flex", "items-center", "justify-center", "gap-2")}>
-        {title.icon && (
+        {titleIcon && (
           <div
             className={cn("text-foreground", "[&>svg]:w-12", "[&>svg]:h-12")}
           >
-            {title.icon}
+            {titleIcon}
           </div>
         )}
       </div>
@@ -97,7 +111,7 @@ export const SignUpForm = () => {
               "text-green-600",
               "dark:text-green-400",
               "text-3xl",
-              "font-semibold"
+              "font-semibold",
             )}
           >
             Sign up
@@ -114,6 +128,18 @@ export const SignUpForm = () => {
         <CardContent className={cn("px-0")}>
           <form onSubmit={handleSignUp}>
             <div className={cn("flex", "flex-col", "gap-2")}>
+              <Label htmlFor="name">Full name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="John Doe"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className={cn("flex", "flex-col", "gap-2")}>
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -123,6 +149,27 @@ export const SignUpForm = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+            </div>
+
+            <div
+              className={cn("relative", "flex", "flex-col", "gap-2", "mt-6")}
+            >
+              <Label htmlFor="role">Role</Label>
+              <Select
+                value={role}
+                onValueChange={(value) => setRole(value as UserRole)}
+              >
+                <SelectTrigger id="role">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ROLE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div
@@ -157,7 +204,7 @@ export const SignUpForm = () => {
                 "mt-6",
                 "bg-green-600",
                 "hover:bg-green-700",
-                "text-white"
+                "text-white",
               )}
             >
               Sign up
@@ -231,7 +278,7 @@ export const SignUpForm = () => {
                 "text-blue-600",
                 "dark:text-blue-400",
                 "font-semibold",
-                "underline"
+                "underline",
               )}
             >
               Sign in

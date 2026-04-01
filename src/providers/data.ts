@@ -3,6 +3,10 @@ import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
 import { CreateResponse, GetOneResponse, ListResponse } from "@/types";
 import { BACKEND_BASE_URL } from "@/constants";
 
+const normalizedBackendBaseUrl = BACKEND_BASE_URL.endsWith("/")
+  ? BACKEND_BASE_URL
+  : `${BACKEND_BASE_URL}/`;
+
 const options: CreateDataProviderOptions = {
   getList: {
     getEndpoint: ({ resource }) => resource,
@@ -85,6 +89,38 @@ const options: CreateDataProviderOptions = {
     },
   },
 
+  update: {
+    getEndpoint: ({ resource, id }) => `${resource}/${id}`,
+
+    buildBodyParams: async ({ variables }) => variables,
+
+    mapResponse: async (response) => {
+      const json: CreateResponse & { message?: string } = await response.json();
+      if (!response.ok) {
+        throw {
+          message: json.message || response.statusText,
+          statusCode: response.status,
+        };
+      }
+      return json.data ?? {};
+    },
+  },
+
+  deleteOne: {
+    getEndpoint: ({ resource, id }) => `${resource}/${id}`,
+
+    mapResponse: async (response) => {
+      const json: CreateResponse & { message?: string } = await response.json();
+      if (!response.ok) {
+        throw {
+          message: json.message || response.statusText,
+          statusCode: response.status,
+        };
+      }
+      return json.data ?? {};
+    },
+  },
+
   getOne: {
     getEndpoint: ({ resource, id }) => `${resource}/${id}`,
 
@@ -101,6 +137,9 @@ const options: CreateDataProviderOptions = {
   },
 };
 
-const { dataProvider } = createDataProvider(BACKEND_BASE_URL, options);
+const { dataProvider } = createDataProvider(normalizedBackendBaseUrl, options, {
+  credentials: "include",
+  retry: 0,
+});
 
 export { dataProvider };
